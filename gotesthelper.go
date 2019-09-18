@@ -12,15 +12,18 @@ import (
 // SetupTest gives a default logging with debug turned on (the 'log') determines the callling function (the 'testName')
 func SetupTest() (log logapi.Logging, testName string) {
 	testName = GetCallingNameByDepth(2)
-	log = loggo.NewLogAdaptor(logapi.DebugLogging, loggo.NewEmojiMessageHandler(), loggo.NewStdOutPrintln())
-	return log, testName
+	return defaultLogger(logapi.DebugLogging), testName
 }
 
 // SetupTest gives a default logging with caller-defined logging level  the 'log') determines the callling function (the 'testName')
 func SetupTestWithLogLevel(level logapi.Level) (log logapi.Logging, testName string) {
 	testName = GetCallingNameByDepth(2)
-	log = loggo.NewLogAdaptor(level, loggo.NewEmojiMessageHandler(), loggo.NewStdOutPrintln())
-	return log, testName
+	return defaultLogger(level), testName
+}
+
+func defaultLogger(level logapi.Level) logapi.Logging {
+	return loggo.NewLogAdaptor(level, loggo.NewEmojiMessageHandler(), loggo.NewStdOutPrintln())
+	// return loggo.NewLogAdaptor(level, loggo.NewLineNumMessageHandler(loggo.LineNumMessageHandlerParms{}), loggo.NewStdOutPrintln())
 }
 
 // GetCallingName obtains the name of the calling function from here (that is, using depth of 1)
