@@ -9,6 +9,10 @@ import (
 	"github.com/doug4j/gologr/logapi/v1/loggo"
 )
 
+// ExpectedErrorMsg is the message to signal to the developer that the test did pass. Typically used for logging to
+// signal that a test was indeed successful though an expected error had been caught.
+const ExpectedErrorMsg = "OK - Expected error found"
+
 // SetupTest gives a default logging with debug turned on (the 'log') determines the callling function (the 'testName')
 func SetupTest() (log logapi.Logging, testName string) {
 	testName = GetCallingNameByDepth(2)
