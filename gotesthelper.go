@@ -8,9 +8,14 @@ import (
 	logapi "github.com/doug4j/gologr/logapi/v1"
 )
 
-//GetCallingName obtains the name of the calling function
+//GetCallingName obtains the name of the calling function from here (that is, using depth of 1)
 func GetCallingName() string {
-	pc, _, _, _ := runtime.Caller(1)
+	return GetCallingNameByDepth(1)
+}
+
+//GetCallingName obtains the name using a depth
+func GetCallingNameByDepth(depth int) string {
+	pc, _, _, _ := runtime.Caller(depth)
 
 	fullPCName := runtime.FuncForPC(pc).Name()
 	lastIndexOfPc := strings.LastIndex(fullPCName, "/") + 1
