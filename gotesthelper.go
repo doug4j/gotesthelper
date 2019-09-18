@@ -6,14 +6,29 @@ import (
 	"strings"
 
 	logapi "github.com/doug4j/gologr/logapi/v1"
+	"github.com/doug4j/gologr/logapi/v1/loggo"
 )
 
-//GetCallingName obtains the name of the calling function from here (that is, using depth of 1)
+// SetupTest gives a default logging with debug turned on (the 'log') determines the callling function (the 'testName')
+func SetupTest() (log logapi.Logging, testName string) {
+	testName = GetCallingNameByDepth(2)
+	log = loggo.NewLogAdaptor(logapi.DebugLogging, loggo.NewEmojiMessageHandler(), loggo.NewStdOutPrintln())
+	return log, testName
+}
+
+// SetupTest gives a default logging with caller-defined logging level  the 'log') determines the callling function (the 'testName')
+func SetupTestWithLogLevel(level logapi.Level) (log logapi.Logging, testName string) {
+	testName = GetCallingNameByDepth(2)
+	log = loggo.NewLogAdaptor(level, loggo.NewEmojiMessageHandler(), loggo.NewStdOutPrintln())
+	return log, testName
+}
+
+// GetCallingName obtains the name of the calling function from here (that is, using depth of 1)
 func GetCallingName() string {
 	return GetCallingNameByDepth(1)
 }
 
-//GetCallingName obtains the name using a depth
+// GetCallingName obtains the name using a depth
 func GetCallingNameByDepth(depth int) string {
 	pc, _, _, _ := runtime.Caller(depth)
 
