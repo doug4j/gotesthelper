@@ -2,6 +2,7 @@ package testhelper
 
 import (
 	"fmt"
+	"path/filepath"
 	"runtime"
 	"strings"
 
@@ -25,9 +26,28 @@ func SetupTestWithLogLevel(level logapi.Level) (log logapi.Logging, testName str
 	return defaultLogger(level), testName
 }
 
+func getCurrentParentPath() string {
+	_, filename, _, _ := runtime.Caller(0)
+	return filepath.Dir(filename)
+}
+
+// GetParentDirPathFromCurSrcFile get the full path to the running source file and returns the parent directory.
+// This file has only been tested with "go test" and the results are not known outside of a testing context.
+func GetParentDirPathFromCurSrcFile(appendingPaths ...string) string {
+	newPath := getCurrentParentPath()
+	newPath = filepath.Clean(newPath)
+	for _, appendingPath := range appendingPaths {
+		newPath = filepath.Join(newPath, appendingPath)
+		newPath = filepath.Clean(newPath)
+	}
+	return newPath
+}
+
 func defaultLogger(level logapi.Level) logapi.Logging {
-	return loggo.NewLogAdaptor(level, loggo.NewEmojiMessageHandler(), loggo.NewStdOutPrintln())
-	// return loggo.NewLogAdaptor(level, loggo.NewLineNumMessageHandler(loggo.LineNumMessageHandlerParms{}), loggo.NewStdOutPrintln())
+	if level == logapi.InfoLogging {
+		return loggo.NewLogAdaptor(level, loggo.NewEmojiMessageHandler(), loggo.NewStdOutPrintln())
+	}
+	return loggo.NewLogAdaptor(level, loggo.NewLineNumMessageHandler(loggo.LineNumMessageHandlerParms{}), loggo.NewStdOutPrintln())
 }
 
 // GetCallingName obtains the name of the calling function from here (that is, using depth of 1)
