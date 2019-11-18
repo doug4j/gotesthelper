@@ -27,7 +27,7 @@ func SetupTestWithLogLevel(level logapi.Level) (log logapi.Logging, testName str
 }
 
 func getCurrentParentPath() string {
-	_, filename, _, _ := runtime.Caller(0)
+	_, filename, _, _ := runtime.Caller(2)
 	return filepath.Dir(filename)
 }
 
