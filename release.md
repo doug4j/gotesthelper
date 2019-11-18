@@ -44,14 +44,3 @@ git tag -a v0.1.0 -m "First release"
 git push origin v0.1.0
 ```
 
-## 5. Publish with goreleaser
-
-```zsh
-goreleaser release --rm-dist
-```
-
-## 6. Verify build (using version)
-
-```zsh
-./dist/templ_darwin_amd64/templ version
-```
